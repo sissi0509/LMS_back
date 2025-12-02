@@ -1,11 +1,11 @@
 const quizAttemptSchema = new mongoose.Schema(
   {
-    user: { type: String, ref: "UserModel" },
-    course: { String, ref: "CourseModel" },
+    user: { type: String, ref: "UserModel", required: true },
+    course: { String, ref: "CourseModel", required: true },
     quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz", required: true },
     attemptNumber: { type: Number, required: true, default: 0 },
-    submittedAt: { type: Date, default: Date.now },
-    score: { type: Number, required: true },
+    submittedAt: [{ type: Date, required: true }],
+    score: [{ type: Number, required: true }],
 
     answers: [
       {

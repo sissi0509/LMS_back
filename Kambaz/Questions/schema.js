@@ -1,12 +1,12 @@
 const questionSchema = new mongoose.Schema({
-  title: String,
-  question: String,
+  title: { type: String, required: true },
+  question: { type: String, required: true },
   type: {
     type: String,
     enum: ["MCQ", "TRUE_FALSE", "FILL_BLANK"],
     required: true,
   },
-  points: { type: Number, required: true },
+  points: { type: Number, default: 0, required: true },
 
   // For MCQ
   choices: [String],

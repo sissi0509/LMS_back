@@ -9,7 +9,7 @@ const quizSchema = new mongoose.Schema(
     availableFrom: Date,
     availableUntil: Date,
     dueDate: Date,
-    published: { type: Boolean, default: false },
+    published: { type: Boolean, default: false, required: true },
     type: {
       type: String,
       enum: [
