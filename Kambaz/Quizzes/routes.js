@@ -19,13 +19,16 @@ export default function QuizRoutes(app) {
     res.json(quiz);
   };
 
-  const deleteQuiz = app.get(
-    "/api/courses/:courseId/quizzes",
-    findQuizzesForCourse
-  );
+  const deleteQuiz = async (req, res) => {
+    const { courseId, quizId } = req.params;
+    const status = await quizDao.deleteQuiz(courseId, quizId);
+    res.send(status);
+  };
+
+  app.get("/api/courses/:courseId/quizzes", findQuizzesForCourse);
   app.get("/api/quizzes/:quizId", findQuizzesById);
-  app.put("/api/courses/:courseId/quizzes", createQuizForCourse);
-  app;
+  app.post("/api/courses/:courseId/quizzes", createQuizForCourse);
+  app.delete("/api/courses/:courseId/quizzes/:quizId", deleteQuiz);
 }
 
 // const find
