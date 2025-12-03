@@ -7,8 +7,8 @@ const courseSchema = new mongoose.Schema(
     _id: String,
     name: String,
     number: String,
-    startDate: String,
-    endDate: String,
+    startDate: Date,
+    endDate: Date,
     // startDate: { type: Date },
     // endDate: { type: Date },
     image: String,
@@ -16,7 +16,7 @@ const courseSchema = new mongoose.Schema(
     description: String,
     modules: [moduleSchema],
     assignments: [assignmentSchema],
-    quizzes: [{ type: mongoose.Schema.Types.ObjectId, ref: "QuizModel" }],
+    quizzes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Quiz" }],
   },
   { collection: "courses" }
 );

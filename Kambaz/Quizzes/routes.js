@@ -1,0 +1,40 @@
+import QuizDao from "./dao.js";
+export default function QuizRoutes(app) {
+  const quizDao = QuizDao();
+  const findQuizzesForCourse = async (req, res) => {
+    const { courseId } = req.params;
+    const quizzes = await quizDao.findQuizzesForCourse(courseId);
+    res.json(quizzes);
+  };
+
+  const findQuizzesById = async (req, res) => {
+    const { quizId } = req.params;
+    const quiz = await quizDao.findQuizById(quizId);
+    res.json(quiz);
+  };
+
+  const createQuizForCourse = async (req, res) => {
+    const { courseId } = req.params;
+    const quiz = await quizDao.createQuizForCourse(courseId, req.body);
+    res.json(quiz);
+  };
+
+  const deleteQuiz = app.get(
+    "/api/courses/:courseId/quizzes",
+    findQuizzesForCourse
+  );
+  app.get("/api/quizzes/:quizId", findQuizzesById);
+  app.put("/api/courses/:courseId/quizzes", createQuizForCourse);
+  app;
+}
+
+// const find
+//  findQuizzesForCourse(courseId)
+
+//  findQuizById(quizId)
+
+//  createQuizForCourse(courseId, quizData)
+
+//  deleteQuiz(quizId)
+
+//  updateQuiz(quizId, quizUpdates)

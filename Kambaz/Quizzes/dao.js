@@ -6,8 +6,17 @@ export default function Dao() {
     if (!course) {
       return [];
     }
-    return course.assignments;
+    return course.quizzes;
   }
+
+  async function findQuizById(quizId) {
+    const quiz = await quizModel.findById(quizId);
+    if (!quiz) {
+      return null;
+    }
+    return quiz;
+  }
+
   async function createQuizForCourse(courseId, quizData) {
     const course = await courseModel.findById(courseId);
     if (!course) {
@@ -24,13 +33,11 @@ export default function Dao() {
     return quiz;
   }
 
-  async function deleteQuiz(quizId) {
+  async function deleteQuiz(courseId, quizId) {
     const quiz = await quizModel.findById(quizId);
     if (!quiz) {
       throw new Error("Quiz not found");
     }
-
-    const courseId = quiz.course;
 
     await quizModel.deleteOne({ _id: quizId });
     await courseModel.updateOne(
@@ -52,6 +59,7 @@ export default function Dao() {
   }
 
   return {
+    findQuizById,
     findQuizzesForCourse,
     createQuizForCourse,
     deleteQuiz,
