@@ -25,19 +25,15 @@ export default function QuizRoutes(app) {
     res.send(status);
   };
 
+  const updateQuiz = async (req, res) => {
+    const { quizId } = req.params;
+    const quiz = await quizDao.updateQuiz(quizId, req.body);
+    res.json(quiz);
+  };
+
   app.get("/api/courses/:courseId/quizzes", findQuizzesForCourse);
   app.get("/api/quizzes/:quizId", findQuizzesById);
   app.post("/api/courses/:courseId/quizzes", createQuizForCourse);
   app.delete("/api/courses/:courseId/quizzes/:quizId", deleteQuiz);
+  app.put("/api/quizzes/:quizId", updateQuiz);
 }
-
-// const find
-//  findQuizzesForCourse(courseId)
-
-//  findQuizById(quizId)
-
-//  createQuizForCourse(courseId, quizData)
-
-//  deleteQuiz(quizId)
-
-//  updateQuiz(quizId, quizUpdates)

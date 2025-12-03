@@ -53,6 +53,7 @@ export default function Dao() {
     if (!quiz) {
       throw new Error("Quiz not found");
     }
+    delete quizUpdates._id;
     Object.assign(quiz, quizUpdates);
     await quiz.save();
     return quiz;
