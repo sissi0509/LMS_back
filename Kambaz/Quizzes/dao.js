@@ -24,7 +24,6 @@ export default function Dao() {
     }
     const quiz = await quizModel.create({
       ...quizData,
-      course: courseId,
     });
 
     course.quizzes.push(quiz._id);
@@ -53,6 +52,7 @@ export default function Dao() {
     if (!quiz) {
       throw new Error("Quiz not found");
     }
+    delete quizUpdates._id;
     Object.assign(quiz, quizUpdates);
     await quiz.save();
     return quiz;
