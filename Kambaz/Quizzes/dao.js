@@ -24,7 +24,6 @@ export default function Dao() {
     }
     const quiz = await quizModel.create({
       ...quizData,
-      course: courseId,
     });
 
     course.quizzes.push(quiz._id);
