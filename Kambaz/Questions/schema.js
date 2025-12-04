@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 const questionSchema = new mongoose.Schema({
   title: { type: String, required: true },
   question: { type: String, required: true },
@@ -18,3 +20,5 @@ const questionSchema = new mongoose.Schema({
   // For fill in blank
   acceptableAnswers: [String],
 });
+
+export default questionSchema;
