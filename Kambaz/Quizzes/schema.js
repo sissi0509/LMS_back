@@ -5,7 +5,7 @@ const quizSchema = new mongoose.Schema(
     // course: { type: String, ref: "Course", required: true },
     title: { type: String, required: true, trim: true },
     description: { type: String, default: "" },
-    points: { type: Number, min: 0, default: 0 },
+    // points: { type: Number, min: 0, default: 0 },
     availableFrom: Date,
     availableUntil: Date,
     dueDate: Date,
