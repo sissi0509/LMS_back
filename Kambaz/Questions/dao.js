@@ -24,6 +24,7 @@ export default function QuestionsDao(db) {
   }
 
   async function updateQuestion(questionId, questionUpdates) {
+    delete questionUpdates._id;
     return model.updateOne({ _id: questionId }, { $set: questionUpdates });
   }
 
