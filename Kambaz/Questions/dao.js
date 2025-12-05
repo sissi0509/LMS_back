@@ -1,21 +1,28 @@
 import quizModel from "../Quizzes/model.js";
-import model from "./model.js"
+import model from "./model.js";
 export default function QuestionsDao(db) {
-    async function findAllQuestionsForQuiz(quizId) {
-        const quizQuestions = await quizModel.findById(quizId, {_id: 0, questions: 1});
+  async function findAllQuestionsForQuiz(quizId) {
+    const quizQuestions = await quizModel.findById(quizId, {
+      _id: 0,
+      questions: 1,
+    });
 
-        const questionIds = quizQuestions.questions;
+    const questionIds = quizQuestions.questions;
 
-        const questions = await model.find({_id: {$in: questionIds}})
+    const questions = await model.find({ _id: { $in: questionIds } });
 
-        return questions
-    }
+    return questions;
+  }
 
-    async function deleteQuestionFromQuiz(quizId, questionId) {
-        const status = await quizModel.updateOne({_id: quizId}, {$pull: {questions: questionId}})
+  async function deleteQuestionFromQuiz(quizId, questionId) {
+    const status = await quizModel.updateOne(
+      { _id: quizId },
+      { $pull: { questions: questionId } }
+    );
 
-        return model.deleteOne({_id: questionId});
-    }
+    return model.deleteOne({ _id: questionId });
+  }
+
 
     async function deleteAllQuestionsFromQuiz(quizId) {
         const quizQuestions = await quizModel.findById(quizId, {_id: 0, questions: 1});
@@ -29,23 +36,30 @@ export default function QuestionsDao(db) {
         return model.updateOne({_id: questionId}, {$set: questionUpdates})
     }
 
-    async function createQuestionForCourse(quizId, question) {
-        delete question._id
+  async function updateQuestion(questionId, questionUpdates) {
+    return model.updateOne({ _id: questionId }, { $set: questionUpdates });
+  }
 
-        const newQuestion = await model.create({...question, });
+  async function createQuestionForCourse(quizId, question) {
+    delete question._id;
 
-        const quizUpdate = await quizModel.updateOne(
-            {_id: quizId}, {$push: {questions: newQuestion._id}});
+    const newQuestion = await model.create({ ...question });
 
-        return newQuestion;
-    }
+    const quizUpdate = await quizModel.updateOne(
+      { _id: quizId },
+      { $push: { questions: newQuestion._id } }
+    );
 
-    async function findQuestionById(questionId) {
-        const question = await model.find({_id: questionId});
+    return newQuestion;
+  }
 
-        return question;
-    }
+  async function findQuestionById(questionId) {
+    const question = await model.find({ _id: questionId });
 
+    return question;
+  }
+
+<<<<<<< HEAD
     async function findQuizPoints(quizId) {
         const questions = await findAllQuestionsForQuiz(quizId)
         if (questions.length !== 0) {
@@ -63,3 +77,13 @@ export default function QuestionsDao(db) {
         deleteAllQuestionsFromQuiz,
     }
 }
+=======
+  return {
+    findAllQuestionsForQuiz,
+    deleteQuestionFromQuiz,
+    updateQuestion,
+    createQuestionForCourse,
+    findQuestionById,
+  };
+}
+>>>>>>> 828280e6dfb3fe243e471959bf89e5c1e4e292f8

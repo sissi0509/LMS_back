@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 const quizAttemptSchema = new mongoose.Schema(
   {
     user: { type: String, ref: "UserModel", required: true },
@@ -23,3 +24,5 @@ const quizAttemptSchema = new mongoose.Schema(
   },
   { collection: "quizAttempts" }
 );
+
+export default quizAttemptSchema;
