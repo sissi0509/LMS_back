@@ -17,6 +17,12 @@ export default function QuestionRoutes(app) {
         res.send(status);
     }
 
+    const deleteAllQuestionsFromQuiz = async (req, res) => {
+        const {quizId} = req.params;
+        const status = await dao.deleteAllQuestionsFromQuiz(quizId);
+        res.send(status);
+    }
+
     const updateQuestion = async (req, res) => {
         const {questionId} = req.params;
         const questionUpdates = req.body;
@@ -37,8 +43,16 @@ export default function QuestionRoutes(app) {
         res.json(question)
     }
 
+    const findQuizPoints = async (req, res) => {
+        const {quizId} = req.params;
+        const quizPoint = await dao.findQuizPoints(quizId);
+        res.json(quizPoint)
+    }
+
     app.post("/api/quizzes/:quizId/questions", createQuestionForCourse);
     app.delete("/api/quizzes/:quizId/questions/:questionId", deleteQuestionFromQuiz);
+    app.get("/api/quizzes/:quizId/points", findQuizPoints);
+    app.delete("/api/quizzes/:quizId/questions", deleteAllQuestionsFromQuiz);
     app.get("/api/quizzes/:quizId/questions", findAllQuestionsForQuiz);
     app.get("/api/questions/:questionId", findQuestionById)
     app.put("/api/questions/:questionId", updateQuestion);

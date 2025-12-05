@@ -28,6 +28,21 @@ export default function QuestionsDao(db) {
     return model.updateOne({ _id: questionId }, { $set: questionUpdates });
   }
 
+  async function deleteAllQuestionsFromQuiz(quizId) {
+    const quizQuestions = await quizModel.findById(quizId, {
+      _id: 0,
+      questions: 1,
+    });
+
+    const questionIds = quizQuestions.questions;
+
+    return model.deleteMany({ _id: { $in: questionIds } });
+  }
+
+  async function updateQuestion(questionId, questionUpdates) {
+    return model.updateOne({ _id: questionId }, { $set: questionUpdates });
+  }
+
   async function createQuestionForCourse(quizId, question) {
     delete question._id;
 
@@ -47,11 +62,24 @@ export default function QuestionsDao(db) {
     return question;
   }
 
+  async function findQuizPoints(quizId) {
+    const questions = await findAllQuestionsForQuiz(quizId);
+    if (questions.length !== 0) {
+      return questions.reduce((sum, question) => {
+        return sum + question.points;
+      }, 0);
+    } else {
+      return 0;
+    }
+  }
+
   return {
     findAllQuestionsForQuiz,
     deleteQuestionFromQuiz,
     updateQuestion,
     createQuestionForCourse,
     findQuestionById,
+    findQuizPoints,
+    deleteAllQuestionsFromQuiz,
   };
 }
