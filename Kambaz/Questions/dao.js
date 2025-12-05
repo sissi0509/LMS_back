@@ -36,30 +36,26 @@ export default function QuestionsDao(db) {
         return model.updateOne({_id: questionId}, {$set: questionUpdates})
     }
 
-  async function updateQuestion(questionId, questionUpdates) {
-    return model.updateOne({ _id: questionId }, { $set: questionUpdates });
-  }
+    async function createQuestionForCourse(quizId, question) {
+        delete question._id;
 
-  async function createQuestionForCourse(quizId, question) {
-    delete question._id;
+        const newQuestion = await model.create({ ...question });
 
-    const newQuestion = await model.create({ ...question });
+        const quizUpdate = await quizModel.updateOne(
+        { _id: quizId },
+        { $push: { questions: newQuestion._id } }
+        );
 
-    const quizUpdate = await quizModel.updateOne(
-      { _id: quizId },
-      { $push: { questions: newQuestion._id } }
-    );
+        return newQuestion;
+    }
 
-    return newQuestion;
-  }
+    async function findQuestionById(questionId) {
+        const question = await model.find({ _id: questionId });
 
-  async function findQuestionById(questionId) {
-    const question = await model.find({ _id: questionId });
+        return question;
+    }
 
-    return question;
-  }
 
-<<<<<<< HEAD
     async function findQuizPoints(quizId) {
         const questions = await findAllQuestionsForQuiz(quizId)
         if (questions.length !== 0) {
@@ -76,14 +72,5 @@ export default function QuestionsDao(db) {
         findQuizPoints,
         deleteAllQuestionsFromQuiz,
     }
+
 }
-=======
-  return {
-    findAllQuestionsForQuiz,
-    deleteQuestionFromQuiz,
-    updateQuestion,
-    createQuestionForCourse,
-    findQuestionById,
-  };
-}
->>>>>>> 828280e6dfb3fe243e471959bf89e5c1e4e292f8
