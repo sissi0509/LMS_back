@@ -51,6 +51,9 @@ export default function QuestionsDao(db) {
         if (questions.length !== 0) {
             return questions.reduce((sum, question) => {return sum + question.points}, 0);
         }
+        else {
+            return 0;
+        }
     }
 
     return {
