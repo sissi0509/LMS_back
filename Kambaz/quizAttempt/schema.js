@@ -4,8 +4,9 @@ const quizAttemptSchema = new mongoose.Schema(
     user: { type: String, ref: "UserModel", required: true },
     quiz: { type: mongoose.Schema.Types.ObjectId, ref: "Quiz", required: true },
     // attemptNumber: { type: Number, required: true, default: 0 }, derived from the len of submittedAt
-    submittedAt: [{ type: Date, required: true }],
-    score: [{ type: Number, required: true }],
+    startAt: [{ type: Date }],
+    submittedAt: [{ type: Date }],
+    score: [{ type: Number, default: 0 }],
     // last attempt answer
     answers: [
       {

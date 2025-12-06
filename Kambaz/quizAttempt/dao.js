@@ -60,6 +60,38 @@ export default function QuizAttemptDao() {
     return { gradedAnswers, totalScore };
   };
 
+  // const createAttempt = async (userId, quizId) => {
+  //   attempt = await attemptModel.create({
+  //     user: userId,
+  //     quiz: quizId,
+  //     startAt: new Date(attemptData.startAt),
+  //     score: 0,
+  //   });
+  //   return attempt;
+  // };
+
+  // const updateAttempt = async (userId, quizId, attemptData) => {
+  //   const { gradedAnswers, totalScore } = await gradeAttempt(
+  //     attemptData.answers
+  //   );
+
+  //   let attempt = await attemptModel.findOne({ user: userId, quiz: quizId });
+  //   const quiz = await quizModel.findById(quizId);
+  //   const maxAttempts = quiz.maxAttempts;
+  //   const submittedDate = new Date(attemptData.submittedAt);
+  //   const attemptsUsed = attempt.submittedAt.length;
+  //   if (attemptsUsed >= maxAttempts) {
+  //     throw new Error("Already reached the maximum number of attempts!");
+  //   }
+
+  //   attempt.submittedAt.push(submittedDate);
+  //   attempt.score.push(totalScore);
+  //   attempt.answers = gradedAnswers;
+
+  //   await attempt.save();
+  //   return attempt;
+  // };
+
   const createOrUpdateAttempt = async (userId, quizId, attemptData) => {
     const { gradedAnswers, totalScore } = await gradeAttempt(
       attemptData.answers
@@ -68,15 +100,15 @@ export default function QuizAttemptDao() {
     let attempt = await attemptModel.findOne({ user: userId, quiz: quizId });
     const quiz = await quizModel.findById(quizId);
     const maxAttempts = quiz.maxAttempts;
-    const submittedDate = new Date(attemptData.submittedAt);
+    const startTime = new Date(attemptData.startAt);
+    const submittedTime = new Date(attemptData.submittedAt);
 
     if (!attempt) {
       attempt = await attemptModel.create({
         user: userId,
         quiz: quizId,
-        submittedAt: [submittedDate],
-        score: [totalScore],
-        answers: gradedAnswers,
+        startAt: [startTime],
+        score: 0,
       });
       return attempt;
     }
@@ -86,7 +118,7 @@ export default function QuizAttemptDao() {
       throw new Error("Already reached the maximum number of attempts!");
     }
 
-    attempt.submittedAt.push(submittedDate);
+    attempt.submittedAt.push(submittedTime);
     attempt.score.push(totalScore);
     attempt.answers = gradedAnswers;
 
@@ -125,6 +157,8 @@ export default function QuizAttemptDao() {
   return {
     createOrUpdateAttempt,
     getAttempt,
+    // createAttempt,
+    // updateAttempt,
     getAllAttemptForQuiz,
     deleteAttemptForQuiz,
     // getAttemptById,
