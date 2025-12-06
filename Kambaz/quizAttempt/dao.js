@@ -102,14 +102,12 @@ export default function QuizAttemptDao() {
     let attempt = await attemptModel.findOne({ user: userId, quiz: quizId });
     const quiz = await quizModel.findById(quizId);
     const maxAttempts = quiz.maxAttempts;
-    const startTime = new Date(attemptData.startAt);
-    const submittedTime = new Date(attemptData.submittedAt);
 
     if (!attempt) {
       attempt = await attemptModel.create({
         user: userId,
         quiz: quizId,
-        startAt: [startTime],
+        startAt: attemptData.startAt,
         score: 0,
       });
       return attempt;
@@ -120,8 +118,9 @@ export default function QuizAttemptDao() {
       throw new Error("Already reached the maximum number of attempts!");
     }
 
-    attempt.submittedAt.push(submittedTime);
-    attempt.score.push(totalScore);
+    attempt.startAt = attemptData.startAt
+    attempt.submittedAt = attemptData.submittedAt
+    attempt.score = attemptData.score
     attempt.answers = gradedAnswers;
 
     await attempt.save();
