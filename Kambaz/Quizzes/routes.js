@@ -1,6 +1,7 @@
 import QuizDao from "./dao.js";
 import QuestionDao from "../Questions/dao.js";
 import deleteQuizService from "./deleteQuizService.js";
+import copyQuizService from "./copyQuizService.js";
 export default function QuizRoutes(app) {
   const quizDao = QuizDao();
   const questionDao = QuestionDao();
@@ -35,6 +36,13 @@ export default function QuizRoutes(app) {
     res.json(quiz);
   };
 
+  const copyQuiz = async (req, res) => {
+    const {courseId, quizId} = req.params;
+    const quizzes = copyQuizService(courseId, quizId);
+    res.json(quizzes)
+  }
+
+  app.post("/api/courses/:courseId/quizzes/:quizId/copy", copyQuiz);
   app.get("/api/courses/:courseId/quizzes", findQuizzesForCourse);
   app.get("/api/quizzes/:quizId", findQuizzesById);
   app.post("/api/courses/:courseId/quizzes", createQuizForCourse);

@@ -86,9 +86,10 @@ export default function QuestionsDao(db) {
     return updated;
   }
   async function createQuestionForCourse(quizId, question) {
-    delete question._id;
+    const copied = {...question}
+    delete copied._id;
 
-    const newQuestion = await model.create({ ...question });
+    const newQuestion = await model.create({ ...copied, _id: undefined });
 
     const quizUpdate = await quizModel.updateOne(
       { _id: quizId },
