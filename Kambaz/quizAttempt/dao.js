@@ -113,6 +113,10 @@ export default function QuizAttemptDao() {
     return attemptsWithCount;
   };
 
+  const deleteAttemptForQuiz = async (quizId) => {
+    return attemptModel.deleteMany({ quiz: quizId });
+  };
+
   // const getAttemptById = async (attemptId) => {
   //   const attempt = await attemptModel.findById(attemptId);
   //   return attempt;
@@ -122,6 +126,7 @@ export default function QuizAttemptDao() {
     createOrUpdateAttempt,
     getAttempt,
     getAllAttemptForQuiz,
+    deleteAttemptForQuiz,
     // getAttemptById,
   };
 }

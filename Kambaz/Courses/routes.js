@@ -1,5 +1,6 @@
 import CoursesDao from "./dao.js";
 import EnrollmentsDao from "../Enrollments/dao.js";
+import deleteQuizService from "../Quizzes/deleteQuizService.js";
 export default function CourseRoutes(app) {
   const dao = CoursesDao();
   const enrollmentsDao = EnrollmentsDao();
@@ -55,12 +56,27 @@ export default function CourseRoutes(app) {
     const courses = await enrollmentsDao.findCoursesForUser(userId);
     res.json(courses);
   };
+  // const deleteCourse = async (req, res) => {
+  //   const { courseId } = req.params;
+  //   await enrollmentsDao.unenrollAllUsersFromCourse(courseId);
+  //   const status = await dao.deleteCourse(courseId);
+  //   res.send(status);
+  // };
+  // Courses/routes.js
+
+  // DELETE /api/courses/:courseId
   const deleteCourse = async (req, res) => {
     const { courseId } = req.params;
+    const course = await dao.findCourseById(courseId);
+    const quizIds = course.quizzes || [];
+    await Promise.all(
+      quizIds.map((quizId) => deleteQuizService(courseId, quizId))
+    );
     await enrollmentsDao.unenrollAllUsersFromCourse(courseId);
     const status = await dao.deleteCourse(courseId);
     res.send(status);
   };
+
   const updateCourse = async (req, res) => {
     const { courseId } = req.params;
     const courseUpdates = req.body;

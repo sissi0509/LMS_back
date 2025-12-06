@@ -1,6 +1,9 @@
 import QuizDao from "./dao.js";
+import QuestionDao from "../Questions/dao.js";
+import deleteQuizService from "./deleteQuizService.js";
 export default function QuizRoutes(app) {
   const quizDao = QuizDao();
+  const questionDao = QuestionDao();
   const findQuizzesForCourse = async (req, res) => {
     const { courseId } = req.params;
     const quizzes = await quizDao.findQuizzesForCourse(courseId);
@@ -21,7 +24,8 @@ export default function QuizRoutes(app) {
 
   const deleteQuiz = async (req, res) => {
     const { courseId, quizId } = req.params;
-    const status = await quizDao.deleteQuiz(courseId, quizId);
+    const status = await deleteQuizService(courseId, quizId);
+
     res.send(status);
   };
 

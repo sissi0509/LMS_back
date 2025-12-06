@@ -43,6 +43,48 @@ export default function QuestionsDao(db) {
     return model.updateOne({ _id: questionId }, { $set: questionUpdates });
   }
 
+  // async function createOrUpdateQuestion(questionId, questionUpdates, quizId) {
+  //   delete questionUpdates._id;
+
+  //   let existing = await model.findById(questionId);
+  //   if (!existing) {
+  //     const created = await model.create(questionUpdates);
+  //     await quizModel.updateOne(
+  //       { _id: quizId },
+  //       { $push: { questions: created._id } }
+  //     );
+  //     return created;
+  //   }
+  //   const updated = await model.findByIdAndUpdate(questionId, questionUpdates, {
+  //     new: true,
+  //   });
+
+  //   return updated;
+  // }
+
+  async function createOrUpdateQuestion(questionId, questionUpdates, quizId) {
+    const data = { ...questionUpdates };
+    delete data._id;
+
+    if (questionId === "new") {
+      const created = await model.create(data);
+
+      if (quizId) {
+        await quizModel.updateOne(
+          { _id: quizId },
+          { $push: { questions: created._id } }
+        );
+      }
+
+      return created;
+    }
+
+    const updated = await model.findByIdAndUpdate(questionId, questionUpdates, {
+      new: true,
+    });
+
+    return updated;
+  }
   async function createQuestionForCourse(quizId, question) {
     delete question._id;
 
@@ -81,5 +123,6 @@ export default function QuestionsDao(db) {
     findQuestionById,
     findQuizPoints,
     deleteAllQuestionsFromQuiz,
+    createOrUpdateQuestion,
   };
 }
