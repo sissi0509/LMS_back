@@ -33,7 +33,9 @@ export default function QuizAttemptDao() {
       let pointsAwarded = 0;
 
       if (q.type === "MCQ") {
-        isCorrect = a.selectedChoiceIndex === q.correctChoiceIndex;
+        const studentChoice = (a.selectedChoiceText || "").trim().toLowerCase();
+        const correctChoice = (q.correctChoiceText || "").trim().toLowerCase();
+        isCorrect = studentChoice === correctChoice;
       } else if (q.type === "TRUE_FALSE") {
         isCorrect = a.selectedBoolean === q.correctBoolean;
       } else if (q.type === "FILL_BLANK") {

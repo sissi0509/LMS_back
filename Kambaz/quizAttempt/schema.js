@@ -15,7 +15,8 @@ const quizAttemptSchema = new mongoose.Schema(
           ref: "Question",
           required: true,
         },
-        selectedChoiceIndex: Number, // for MCQ
+        // selectedChoiceIndex: Number, // for MCQ
+        selectedChoiceText: String,
         selectedBoolean: Boolean, // for true/false
         textAnswer: String, // for fill in blank
         isCorrect: Boolean,
