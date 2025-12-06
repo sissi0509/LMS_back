@@ -2,7 +2,7 @@ import quizModel from "./model.js";
 import courseModel from "../Courses/model.js";
 export default function Dao() {
   async function findQuizzesForCourse(courseId) {
-    const course = await courseModel.findById(courseId).populate("quizzes");
+    const course = await courseModel.findById(courseId).populate({path: "quizzes", options: {sort: {availableFrom: -1}}});
     if (!course) {
       return [];
     }
@@ -22,10 +22,10 @@ export default function Dao() {
     if (!course) {
       throw new Error(`Course ${courseId} not found`);
     }
+    delete quizData._id;
     const quiz = await quizModel.create({
       ...quizData,
     });
-
     course.quizzes.push(quiz._id);
     await course.save();
 
