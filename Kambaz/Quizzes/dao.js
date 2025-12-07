@@ -9,6 +9,14 @@ export default function Dao() {
     return course.quizzes;
   }
 
+  async function findPublishedQuizzesForCourse(courseId) {
+    const course = await courseModel.findById(courseId).populate({path: "quizzes", match: {published: true}, options: {sort: {availableFrom: -1}}})
+    if (!course) {
+      return [];
+    }
+    return course.quizzes;
+  }
+
   async function findQuizById(quizId) {
     const quiz = await quizModel.findById(quizId);
     if (!quiz) {
@@ -64,5 +72,6 @@ export default function Dao() {
     createQuizForCourse,
     deleteQuiz,
     updateQuiz,
+    findPublishedQuizzesForCourse
   };
 }
