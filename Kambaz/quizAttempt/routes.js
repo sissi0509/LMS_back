@@ -25,8 +25,8 @@ export default function AttemptRoutes(app) {
   };
 
   const getGrade = async (req, res) => {
-    const { totalScore } = await dao.gradeAttempt(req.body);
-    res.send(totalScore);
+    const result = await dao.gradeAttempt(req.body);
+    res.send(result);
   };
 
   app.post(
