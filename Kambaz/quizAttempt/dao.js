@@ -36,22 +36,37 @@ export default function QuizAttemptDao() {
         const studentChoice = (a.selectedChoiceText || "").trim().toLowerCase();
         const correctChoice = (q.correctChoiceText || "").trim().toLowerCase();
         isCorrect = studentChoice === correctChoice;
+        pointsAwarded = isCorrect ? q.points : 0;
       } else if (q.type === "TRUE_FALSE") {
         isCorrect = a.selectedBoolean === q.correctBoolean;
+        pointsAwarded = isCorrect ? q.points : 0;
       } else if (q.type === "FILL_BLANK") {
-        const student = (a.textAnswer || "").trim().toLowerCase();
-        const acceptable = (q.acceptableAnswers || []).map((ans) =>
-          ans.trim().toLowerCase()
-        );
+        const acceptable = q.acceptableAnswers ?? []; // string[][]
+        const studentAnswers = a.textAnswer ?? []; // string[]
+        const totalBlanks = acceptable.length;
 
-        isCorrect = student.length > 0 && acceptable.includes(student);
+        if (totalBlanks > 0) {
+          let correctCount = 0;
+
+          for (let i = 0; i < totalBlanks; i++) {
+            const studentRaw = (studentAnswers[i] || "").trim().toLowerCase();
+            const allowedForBlank = acceptable[i] ?? [];
+            const allowedNormalized = allowedForBlank.map((ans) =>
+              (ans || "").trim().toLowerCase()
+            );
+            if (allowedNormalized.includes(studentRaw)) {
+              correctCount++;
+            }
+          }
+          const perBlank = q.points / totalBlanks;
+          pointsAwarded = perBlank * correctCount;
+          isCorrect = correctCount === totalBlanks;
+        } else {
+          isCorrect = false;
+          pointsAwarded = 0;
+        }
       }
-
-      if (isCorrect) {
-        pointsAwarded = q.points;
-        totalScore += pointsAwarded;
-      }
-
+      totalScore += pointsAwarded;
       return {
         ...a,
         isCorrect,
@@ -158,6 +173,7 @@ export default function QuizAttemptDao() {
   return {
     createOrUpdateAttempt,
     getAttempt,
+    gradeAttempt,
     // createAttempt,
     // updateAttempt,
     getAllAttemptForQuiz,

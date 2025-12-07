@@ -18,7 +18,10 @@ const questionSchema = new mongoose.Schema({
   correctBoolean: Boolean,
 
   // For fill in blank
-  acceptableAnswers: [String],
+  acceptableAnswers: {
+    type: [[String]],
+    default: [],
+  },
 });
 
 export default questionSchema;

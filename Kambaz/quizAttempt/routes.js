@@ -24,10 +24,16 @@ export default function AttemptRoutes(app) {
     res.json(attempts);
   };
 
+  const getGrade = async (req, res) => {
+    const { totalScore } = await dao.gradeAttempt(req.body);
+    res.send(totalScore);
+  };
+
   app.post(
     "/api/users/:userId/quizzes/:quizId/attempts",
     createOrUpdateAttempt
   );
   app.get("/api/users/:userId/quizzes/:quizId/attempts", getAttempt);
   app.get("/api/quizzes/:quizId/attempts", getAllAttemptForQuiz);
+  app.post("/api/quizzes/grade", getGrade);
 }
