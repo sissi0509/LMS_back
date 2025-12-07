@@ -108,7 +108,7 @@ export default function QuizAttemptDao() {
         user: userId,
         quiz: quizId,
         startAt: attemptData.startAt,
-        score: 0,
+        // score: 0,
       });
       return attempt;
     }
@@ -118,9 +118,9 @@ export default function QuizAttemptDao() {
       throw new Error("Already reached the maximum number of attempts!");
     }
 
-    attempt.startAt = attemptData.startAt
-    attempt.submittedAt = attemptData.submittedAt
-    attempt.score = attemptData.score
+    attempt.startAt = attemptData.startAt;
+    attempt.submittedAt = attemptData.submittedAt;
+    attempt.score.push(totalScore);
     attempt.answers = gradedAnswers;
 
     await attempt.save();
