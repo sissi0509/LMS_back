@@ -70,7 +70,7 @@ export default function QuestionsDao(db) {
       const created = await model.create(data);
 
       if (quizId) {
-        await quizModel.updateOne(
+        const result = await quizModel.updateOne(
           { _id: quizId },
           { $push: { questions: created._id } }
         );
@@ -79,14 +79,14 @@ export default function QuestionsDao(db) {
       return created;
     }
 
-    const updated = await model.findByIdAndUpdate(questionId, questionUpdates, {
+    const updated = await model.findByIdAndUpdate(questionId, data, {
       new: true,
     });
 
     return updated;
   }
   async function createQuestionForCourse(quizId, question) {
-    const copied = {...question}
+    const copied = { ...question };
     delete copied._id;
 
     const newQuestion = await model.create({ ...copied, _id: undefined });
