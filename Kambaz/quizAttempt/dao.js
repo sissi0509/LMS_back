@@ -132,11 +132,12 @@ export default function QuizAttemptDao() {
     if (attemptsUsed >= maxAttempts) {
       throw new Error("Already reached the maximum number of attempts!");
     }
-
     attempt.startAt = attemptData.startAt;
     attempt.submittedAt = attemptData.submittedAt;
-    attempt.score.push(totalScore);
     attempt.answers = gradedAnswers;
+    if (attemptData.startAt.length === attemptData.submittedAt.length) {
+      attempt.score.push(totalScore);
+    }
 
     await attempt.save();
     return attempt;
